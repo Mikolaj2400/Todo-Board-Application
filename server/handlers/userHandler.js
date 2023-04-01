@@ -10,12 +10,14 @@ const registerUser = asyncHandler(async (req,res) => {
     const {email, password} = req.body
     if(!email || !password) {
         res.status(400)
+        res.send({message: "All fields are mandatory"})
         throw new Error("All fields are mandatory")
     }
 
-    const userAvailable = await User.findOne({email})
+    const userAvailable = await User.findOne({email:email})
     if(userAvailable) {
         res.status(400)
+        res.send({message: "Email already used"})
         throw new Error("Email already used")
     }
 
@@ -32,6 +34,7 @@ const registerUser = asyncHandler(async (req,res) => {
         res.json({_id: user.id, email: user.email})
     }else {
         res.status(400)
+        res.send({message: "User data is not valid"})
         throw new Error("User data is not valid")
     }
 })
@@ -41,10 +44,11 @@ const loginUser = asyncHandler(async (req,res) => {
     const {email, password} = req.body
     if(!email || !password) {
         res.status(400)
+        res.send({message: "All fields are mandatory"})
         throw new Error("All fields are mandatory")
     }
 
-    const user = await User.findOne({email})
+    const user = await User.findOne({email:email})
     //compare password
     if(user && (await bcrypt.compare(password, user.password))) {
         const accessToken = jwt.sign(
@@ -60,15 +64,20 @@ const loginUser = asyncHandler(async (req,res) => {
         res.json({accessToken})
     }else {
         res.status(401)
+        res.send({message: "Email or password is not correct"})
         throw new Error("Email or password is not correct")
+
     }
 })
 
 
 const currentUser = asyncHandler(async (req,res) => {
-
     res.json(req.user)
- 
 })
 
-module.exports = {registerUser, loginUser, currentUser}
+const messageUser = asyncHandler(async (req,res) => {
+    res.json("Message from the server")
+    res.status(200)
+})
+
+module.exports = {registerUser, loginUser, currentUser, messageUser}
