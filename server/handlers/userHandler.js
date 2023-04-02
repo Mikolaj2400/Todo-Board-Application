@@ -72,6 +72,7 @@ const loginUser = asyncHandler(async (req,res) => {
 
 
 const currentUser = asyncHandler(async (req,res) => {
+    console.log(req.user.id)
     res.json(req.user)
 })
 

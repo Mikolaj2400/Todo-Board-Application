@@ -15,7 +15,7 @@ function App () {
           <Route path="/api/user/register" exact element={<Register/>}/>
           <Route path="/api/user/login" exact element={<Login/>}/>
           <Route path="/" element={<Navigate replace to="/api/user/login"/>}/>
-          <Route path="//api/user/" element={<Navigate replace to="/api/user/login"/>}/>
+          <Route path="/api/user/" element={<Navigate replace to="/api/user/login"/>}/>
         </Routes>
       </div>
     );

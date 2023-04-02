@@ -4,16 +4,23 @@ const dotenv = require("dotenv").config()
 
 const addTask = asyncHandler(async (req,res) => {
     const {title, description} = req.body
+    const user = req.user.id
+    console.log(user)
 
     if(!title) {
         res.status(400)
-        // res.send({message: "All fields are mandatory"})
+        // res.send({message: "Uzupełnij tytuł"})
         throw new Error("Uzupełnij tytuł")
+    } else if(!user) {
+        res.status(400)
+        // res.send({message: "Brak zalogowanego użytkownika"})
+        throw new Error("Brak zalogowanego użytkownika")
     }
 
     const task = await Task.create({
         title,
-        description
+        description,
+        user
     })
 
     console.log(`task created ${task}`)
@@ -21,7 +28,7 @@ const addTask = asyncHandler(async (req,res) => {
 
     if(task) {
         res.status(200),
-        res.json({_id: task.id, title: task.title, description: task.description})
+        res.json({_id: task.id, title: task.title, description: task.description, user: task.user})
     }else {
         res.status(400)
         // res.send({message: "Task data is not valid"})
@@ -31,94 +38,96 @@ const addTask = asyncHandler(async (req,res) => {
 
 const showTasks = asyncHandler(async (req,res) => {
 
-    const tasks = await Task.find()
-    res.json(tasks)
+    const user = req.user.id
+
+    if(!user) {
+        res.status(400)
+        // res.send({message: "Brak zalogowanego użytkownika"})
+        throw new Error("Brak zalogowanego użytkownika")
+    } else {
+        const tasks = await Task.find({user: user})
+        res.json(tasks)
+    }
 })
 
 const completeTask = asyncHandler(async (req,res) => {
 
-    
-    // const tasks = await Task.findById(req.params.id)
-    // res.json(tasks)
-    // console.log(tasks)
+    const user = req.user.id
 
-
+    console.log(user)
     const task = await Task.findById(req.params.id)
 
-    task.completed = !task.completed
+    // console.log(task.user)
 
-    task.save()
-
-    res.json({title: task.title, description: task.description, completed: task.completed})
-
-
-    // const task = await Task.findByIdAndUpdate(
-    //     req.params.id, 
-    //     {completed: !completed},{ new: true })
-    // res.json({title: task.title, description: task.description, completed: task.completed})
-
-    // console.log(req.params)
-    // const {title, description, completed} = req.body
-
-
-    // if(!title) {
-    //     res.status(400)
-    //     // res.send({message: "All fields are mandatory"})
-    //     throw new Error("Uzupełnij tytuł")
-    // }
-
-    // const task = await Task.findByIdAndUpdate(
-    //     req.params.id,
-    //     {
-    //         title,
-    //         description,
-    //         completed
-    //     },
-    //     { new: true })
-    // res.json({_id: task.id, title: task.title, description: task.description, completed: task.completed})
-
+    if(!task){
+        res.status(401)
+        throw new Error("Brak taska")
+    } else if(task.user.toString() !== user.toString()) {
+        res.status(401)
+        throw new Error("Brak uprawnień do usunięcia tego zadania")    
+    } else {
+        task.completed = !task.completed
+        task.save()
+        res.json({title: task.title, description: task.description, completed: task.completed})
+    }
 })
 
 const editTask = asyncHandler(async (req,res) => {
-    console.log(req.params)
-    const {title, description, completed} = req.body
+
+    const user = req.user.id
+    
+    const task = await Task.findById(req.params.id)
+
+    const {title, description} = req.body
 
     console.log(title)
     console.log(description)
-    console.log(completed)
 
-    if(!title) {
-        res.status(400)
-        // res.send({message: "All fields are mandatory"})
-        throw new Error("Uzupełnij tytuł")
+    if(task.user.toString() !== user.toString()){
+        res.status(401)
+        throw new Error("Brak uprawnień do usunięcia tego zadania")
+    } else {
+        if(!title) {
+            res.status(400)
+            // res.send({message: "All fields are mandatory"})
+            throw new Error("Uzupełnij tytuł")
+        }
+        await Task.findByIdAndUpdate(
+            req.params.id,
+            {
+                title,
+                description,
+            },
+            { new: true })
+        res.json({_id: task.id, title: task.title, description: task.description})
     }
-
-    const task = await Task.findByIdAndUpdate(
-        req.params.id,
-        {
-            title,
-            description,
-            completed
-        },
-        { new: true })
-    res.json({_id: task.id, title: task.title, description: task.description, completed: task.completed})
-
 })
 
 const deleteTask = asyncHandler(async (req,res) => {
 
-    const {id} = req.params
-    const task = await Task.findByIdAndDelete(req.params.id)
+    const user = req.user.id
 
-    if(task) {
-        res.status(204)
-        console.log(`task deleted ${task}`)
-    }else {
-        res.status(404)
-        // res.send({message: "Task data is not valid"})
-        throw new Error("Brak zadania")
-    }
-    res.json(task)
+    console.log(`tokenowy user_id ${user}`)
+    const task = await Task.findById(req.params.id)
+
+    console.log(`user_id z bazy ${task.user}`)
+
+        if(task.user.toString() !== user.toString()){
+            res.status(401)
+            throw new Error("Brak uprawnień do usunięcia tego zadania")
+            // res.send()
+        } else {
+            if(task) {
+                await Task.findByIdAndDelete(req.params.id)
+                res.status(204)
+                console.log(`task deleted ${task}`)
+            }else {
+                res.status(404)
+                // res.send({message: "Task data is not valid"})
+                throw new Error("Brak zadania")
+            }
+            res.json(task)
+        }
 })
 
 module.exports = {addTask, showTasks, completeTask, editTask, deleteTask}
