@@ -17,10 +17,14 @@ const Login = () => {
 
         try {
             const url = "http://localhost:5000/api/user/login"
-            const {data:res} = await axios.post(url, data)
-            localStorage.setItem("token", res.data)
-            window.location = "/"
-            console.log(res.message)
+            await axios.post(url, data)
+            .then(res => localStorage.setItem("token", res.data.accessToken, 
+            {headers: {'Authorization': `Bearer ${res.data.accessToken}`}},
+            window.location = "/api/tasks/")) 
+            .catch(err => console.error(err))
+            // , {headers: {'Authorization': `Bearer ${res.data.accessToken}`}}
+            // window.location = "/api/tasks/"
+            // console.log(res.message)
         } catch (error) {
             if(error.response && error.response.status >= 400 && error.response.status <= 500) {
                 setError(error.response.data.message)

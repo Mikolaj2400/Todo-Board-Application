@@ -3,7 +3,7 @@ import './App.css';
 import {Routes, Route, Navigate} from 'react-router-dom'
 import Login from './components/Login'
 import Register from './components/Register'
-import AfterLogin from './components/AfterLogin'
+import Tasks from './components/Tasks'
 
 function App () {
 
@@ -11,7 +11,7 @@ function App () {
     return (
       <div>
         <Routes>
-          {user && <Route path="/" exact element={<AfterLogin/>}/>}
+          {user && <Route path="/api/tasks/" exact element={<Tasks/>}/>}
           <Route path="/api/user/register" exact element={<Register/>}/>
           <Route path="/api/user/login" exact element={<Login/>}/>
           <Route path="/" element={<Navigate replace to="/api/user/login"/>}/>

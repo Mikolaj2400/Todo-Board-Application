@@ -40,9 +40,10 @@ const showTasks = asyncHandler(async (req,res) => {
 
     const user = req.user.id
 
+
     if(!user) {
         res.status(400)
-        // res.send({message: "Brak zalogowanego użytkownika"})
+        res.send({message: "Brak zalogowanego użytkownika"})
         throw new Error("Brak zalogowanego użytkownika")
     } else {
         const tasks = await Task.find({user: user})
