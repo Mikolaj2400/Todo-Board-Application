@@ -5,11 +5,12 @@ const dotenv = require("dotenv").config()
 const addTask = asyncHandler(async (req,res) => {
     const {title, description} = req.body
     const user = req.user.id
+    const completed = false
     console.log(user)
 
     if(!title) {
         res.status(400)
-        // res.send({message: "Uzupełnij tytuł"})
+        res.send({message: "Uzupełnij tytuł"})
         throw new Error("Uzupełnij tytuł")
     } else if(!user) {
         res.status(400)
@@ -20,7 +21,8 @@ const addTask = asyncHandler(async (req,res) => {
     const task = await Task.create({
         title,
         description,
-        user
+        user,
+        completed
     })
 
     console.log(`task created ${task}`)
@@ -28,7 +30,7 @@ const addTask = asyncHandler(async (req,res) => {
 
     if(task) {
         res.status(200),
-        res.json({_id: task.id, title: task.title, description: task.description, user: task.user})
+        res.json({_id: task.id, title: task.title, description: task.description, completed: task.completed, user: task.user})
     }else {
         res.status(400)
         // res.send({message: "Task data is not valid"})
