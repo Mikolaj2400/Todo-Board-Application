@@ -133,9 +133,7 @@ const Tasks = () => {
     }
 
     const handleSave = async (task) => {
-
         const url = `http://localhost:5000/api/tasks/edit/`
-
         const id = task._id
 
         try
@@ -154,6 +152,31 @@ const Tasks = () => {
                 setEditState("")
                 setError("")
         } catch (error) {
+            if(error.response && error.response.status >= 400 && error.response.status <= 500) {
+                setError(error.response.data.message)
+            }
+        }
+    }
+
+//zaznaczenie jako wykonane
+
+    const handleCompleteTask = async (task) => {
+        const url = `http://localhost:5000/api/tasks/complete/`
+        const id = task._id
+
+        try{
+            await axios.put(url + `${id}`, {
+                "completed":!task.completed
+            }, {
+                headers: {
+                  'Authorization': `Bearer ${authToken}`,
+                  'Content-Type': 'application/json'
+                }})
+                console.log(task.completed)
+
+                getTasks()
+                setError("")
+        } catch(error) {
             if(error.response && error.response.status >= 400 && error.response.status <= 500) {
                 setError(error.response.data.message)
             }
@@ -196,8 +219,9 @@ const Tasks = () => {
                     <div className={'task'} key={task._id}>
                       <div className="text"> {task.title}</div>
                       <div className="text"> {task.description}</div>
-                      <input type="checkbox"  value="" name="" id="" />Zrobione!
+
                       <br/>
+                      <button onClick={() => handleCompleteTask(task)} className="complete-task">Zrobione!</button>
                       <button onClick={() => handleEditTask(task._id)} className="edit-task">Edytuj</button>
                       <button onClick={() => handleDeleteTask(task._id)} className="delete-task">Usuń</button>
                       <hr />
