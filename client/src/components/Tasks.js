@@ -184,16 +184,23 @@ const Tasks = () => {
     }
 
     return (
-        <div>
-            <h1>Zalogowałeś się!</h1>
-            <button onClick={handleLogout}>Wyloguj się</button>
+        <div className="App">
+            <nav>
+                <ul>
+                    <li><strong>ToDo Board</strong></li>
+                </ul>
+                <ul>
+                    <li><button onClick={handleLogout}>Wyloguj się</button></li>
+                </ul>
+            </nav>
+
             <div>
                 <h3>Dodaj nowe zadanie</h3>
                 <form onSubmit={handleAddingTask}>
-                    <label htmlFor="text">Podaj nazwę zadania:</label>
+                    <label htmlFor="text">Nazwa zadania:</label>
                     <input type="text" placeholder="Wpisz nazwę" name="title" id="title" value={data.title} onChange={handleChange}/>
                     <br />
-                    <label htmlFor="text">Podaj opis zadania:</label>
+                    <label htmlFor="text">Opis zadania:</label>
                     <input type="text" placeholder="Wpisz opis" name="description" id="description" value={data.description} onChange={handleChange}/>
                     <br />
                     {error && <div>{error}</div>}
@@ -202,7 +209,6 @@ const Tasks = () => {
             </div>
             
             <div>
-                <h1>Welcome!</h1>
                 <h4>Twoje zadania</h4>
                 {tasks.length === 0 && <div>Brak tasków!</div>}
                 {tasks && tasks.map(task => (
@@ -219,7 +225,6 @@ const Tasks = () => {
                     <div className={'task'} key={task._id}>
                       <div className="text"> {task.title}</div>
                       <div className="text"> {task.description}</div>
-
                       <br/>
                       <button onClick={() => handleCompleteTask(task)} className="complete-task">Zrobione!</button>
                       <button onClick={() => handleEditTask(task._id)} className="edit-task">Edytuj</button>

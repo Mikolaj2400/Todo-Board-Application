@@ -36,19 +36,19 @@ const Register = () => {
 
     return (
         <div>
-            <h1>Zarejestruj się</h1>
+            <h1 style={{textAlign: "center"}}>Zarejestruj się</h1>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="email">Podaj E-mail:</label>
-                <input type="email" placeholder="email" name="email" id="email" value={data.email} onChange={handleChange}/>
+                <label htmlFor="email">E-mail:</label>
+                <input type="email" placeholder="Podaj E-mail" name="email" id="email" value={data.email} onChange={handleChange}/>
                 <br />
-                <label htmlFor="password">Podaj hasło:</label>
-                <input type="password" placeholder="Hasło" name="password" id="" value={data.password} onChange={handleChange}/>
+                <label htmlFor="password">Hasło:</label>
+                <input type="password" placeholder="Podaj hasło" name="password" id="" value={data.password} onChange={handleChange}/>
                 <br />
                 {error && <div>{error}</div>}
                 <button type="submit">Zarejestruj się</button>
             </form>
 
-            <p>Jeśli masz już konto, przejdź do <Link to="/api/user/login">Logowania</Link></p>
+            <p style={{textAlign: "center"}}>Jeśli masz już konto, przejdź do <Link to="/api/user/login">Logowania</Link></p>
         </div>
     )
 }

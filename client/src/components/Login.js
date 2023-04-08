@@ -40,19 +40,19 @@ const Login = () => {
 
     return (
         <div>
-            <h1>Zaloguj się</h1>
+            <h1 style={{textAlign: "center"}}>Zaloguj się</h1>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="email">Podaj E-mail:</label>
-                <input type="email" placeholder="email" name="email" id="email" value={data.email} onChange={handleChange}/>
+                <label htmlFor="email">E-mail:</label>
+                <input type="email" placeholder="Podaj email" name="email" id="email" value={data.email} onChange={handleChange}/>
                 <br />
-                <label htmlFor="password">Podaj hasło:</label>
-                <input type="password" placeholder="Hasło" name="password" id="" value={data.password} onChange={handleChange}/>
+                <label htmlFor="password">Hasło:</label>
+                <input type="password" placeholder="Podaj hasło" name="password" id="" value={data.password} onChange={handleChange}/>
                 <br />
                 {error && <div>{error}</div>}
                 <button type="submit">Zaloguj się</button>
             </form>
 
-            <p>Jeśli nie masz konta <Link to="/api/user/register">Zarejestruj się</Link></p>
+            <p style={{textAlign: "center"}}>Jeśli nie masz konta <Link to="/api/user/register">Zarejestruj się</Link></p>
         </div>
     )
 }
