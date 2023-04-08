@@ -88,11 +88,11 @@ const editTask = asyncHandler(async (req,res) => {
 
     if(task.user.toString() !== user.toString()){
         res.status(401)
-        throw new Error("Brak uprawnień do usunięcia tego zadania")
+        throw new Error("Brak uprawnień do edycji tego zadania")
     } else {
         if(!title) {
             res.status(400)
-            // res.send({message: "All fields are mandatory"})
+            res.send({message: "Uzupełnij tytuł"})
             throw new Error("Uzupełnij tytuł")
         }
         await Task.findByIdAndUpdate(

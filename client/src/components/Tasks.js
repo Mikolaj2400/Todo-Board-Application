@@ -19,6 +19,7 @@ const Tasks = () => {
         getTasks()
       }, [])
 
+//wyświetlanie
 
     const getTasks = async () => {
         
@@ -45,6 +46,8 @@ const Tasks = () => {
         }
     }
 
+//dodawanie
+
     const handleAddingTask = async (e) => {
         e.preventDefault()
         const url = "http://localhost:5000/api/tasks/add"
@@ -57,7 +60,6 @@ const Tasks = () => {
                 }})
                 .then(res => {
                     setTasks([...tasks, res.data])
-                    console.log(res)
                 })
                 
                 setData({
@@ -73,6 +75,8 @@ const Tasks = () => {
         }
     }
 
+//usuwanie
+
     const handleDeleteTask = async (id) => {
         const url = `http://localhost:5000/api/tasks/delete/`
 
@@ -85,6 +89,7 @@ const Tasks = () => {
                 }})
                 .then(res => {
                     setTasks([...tasks, res.data])
+                    console.log(res)
                 } )
                 
                 setTasks(tasks => tasks.filter(task => task._id !== data._id))
@@ -96,19 +101,64 @@ const Tasks = () => {
         }
     }
 
-    const handleEditTask = async (id) => {
-        
-    }
+//obsługa formularza
 
     const handleChange = (e) => {
         setData({...data, [e.target.name]:e.target.value})
     }
+
+//wylogowanie
 
     const handleLogout = () => {
         localStorage.removeItem("token")
         window.location = "/"
     }
 
+
+//edytowanie
+
+    const [editState, setEditState] = useState("")
+ 
+    const handleEditTask = async (id) => {
+        console.log(id)
+        setEditState(id)
+    }
+
+    const handleEditChange = (e) => {
+
+        const newTasks = tasks.map(task => (
+            task._id === editState ? {...task, [e.target.name] : e.target.value} : task
+        ))
+        setTasks(newTasks)
+    }
+
+    const handleSave = async (task) => {
+
+        const url = `http://localhost:5000/api/tasks/edit/`
+
+        const id = task._id
+
+        try
+        {
+            await axios.put(url + `${id}`, {
+                "_id": task._id,
+                "title": task.title,
+                "description": task.description
+                },{
+                headers: {
+                  'Authorization': `Bearer ${authToken}`,
+                  'Content-Type': 'application/json'
+                }})
+
+                getTasks()
+                setEditState("")
+                setError("")
+        } catch (error) {
+            if(error.response && error.response.status >= 400 && error.response.status <= 500) {
+                setError(error.response.data.message)
+            }
+        }
+    }
 
     return (
         <div>
@@ -128,25 +178,34 @@ const Tasks = () => {
                 </form>
             </div>
             
-
             <div>
                 <h1>Welcome!</h1>
                 <h4>Twoje zadania</h4>
                 {tasks.length === 0 && <div>Brak tasków!</div>}
                 {tasks && tasks.map(task => (
+                    editState === task._id ? 
+
+                    <div key={task._id}>
+                        <input type="text"  name="title" id="title" value={task.title} onChange={handleEditChange}/>
+                        <input type="text" name="description" id="description" value={task.description} onChange={handleEditChange}/>
+                        {error && <div>{error}</div>}
+                        <button className="edit-task" onClick={() => handleSave(task)}>Zapisz</button>
+                        <hr />
+                    </div>
+                    :
                     <div className={'task'} key={task._id}>
                       <div className="text"> {task.title}</div>
                       <div className="text"> {task.description}</div>
+                      <input type="checkbox"  value="" name="" id="" />Zrobione!
+                      <br/>
                       <button onClick={() => handleEditTask(task._id)} className="edit-task">Edytuj</button>
-                      <button onClick={() => handleDeleteTask(task._id)} className="delete-task">x</button>
+                      <button onClick={() => handleDeleteTask(task._id)} className="delete-task">Usuń</button>
                       <hr />
                     </div>
                 ))}
-            </div>
-            
+            </div>  
         </div>
     )
 }
-
 
 export default Tasks
