@@ -11,7 +11,8 @@ const Tasks = () => {
     const [error, setError] = useState([])
     const [data, setData] = useState({
         title: "",
-        description: ""
+        description: "",
+        is_habit: false
     })
 
     useEffect (() => {
@@ -64,7 +65,8 @@ const Tasks = () => {
                 
                 setData({
                     title: "",
-                    description: "" 
+                    description: "",
+                    is_habit: false 
                 })
 
                 setError("")
@@ -104,7 +106,13 @@ const Tasks = () => {
 //obsługa formularza
 
     const handleChange = (e) => {
-        setData({...data, [e.target.name]:e.target.value})
+        const type = e.target.type
+        if(type === "text"){
+            setData({...data, [e.target.name]:e.target.value})
+        } else if (type === "checkbox") {
+            setData({...data, [e.target.name]:e.target.checked})
+        }
+ 
     }
 
 //wylogowanie
@@ -117,17 +125,33 @@ const Tasks = () => {
 
 //edytowanie
 
-    const [editState, setEditState] = useState("")
+    const [editStateTask, setEditStateTask] = useState("")
+    const [editStateHabit, setEditStateHabit] = useState("")
  
     const handleEditTask = async (id) => {
         console.log(id)
-        setEditState(id)
+        setEditStateTask(id)
+        setEditStateHabit('')
     }
 
-    const handleEditChange = (e) => {
+    const handleEditHabit = async (id) => {
+        console.log(id)
+        setEditStateHabit(id)
+        setEditStateTask('')
+    }
+
+    const handleEditTaskChange = (e) => {
 
         const newTasks = tasks.map(task => (
-            task._id === editState ? {...task, [e.target.name] : e.target.value} : task
+            task._id === editStateTask ? {...task, [e.target.name] : e.target.value} : task
+        ))
+        setTasks(newTasks)
+    }
+
+    const handleEditHabitChange = (e) => {
+
+        const newTasks = tasks.map(task => (
+            task._id === editStateHabit ? {...task, [e.target.name] : e.target.value} : task
         ))
         setTasks(newTasks)
     }
@@ -149,7 +173,8 @@ const Tasks = () => {
                 }})
 
                 getTasks()
-                setEditState("")
+                setEditStateTask("")
+                setEditStateHabit("")
                 setError("")
         } catch (error) {
             if(error.response && error.response.status >= 400 && error.response.status <= 500) {
@@ -187,52 +212,103 @@ const Tasks = () => {
         <div className="App">
             <nav>
                 <ul>
-                    <li><strong>ToDo Board</strong></li>
+                    <li><strong>ToDo List Simplified</strong></li>
                 </ul>
                 <ul>
                     <li><button onClick={handleLogout}>Wyloguj się</button></li>
                 </ul>
             </nav>
 
-            <div>
-                <h3>Dodaj nowe zadanie</h3>
-                <form onSubmit={handleAddingTask}>
-                    <label htmlFor="text">Nazwa zadania:</label>
-                    <input type="text" placeholder="Wpisz nazwę" name="title" id="title" value={data.title} onChange={handleChange}/>
+            <div style={{alignItems:"center", justifyContent:'center'}}>
+                <h3 className="label">Dodaj nowe zadanie</h3>
+                <form style={{textAlign: "center"}} onSubmit={handleAddingTask}>
+                    <label className="label" htmlFor="text">Nazwa zadania:</label>
+                    <input style={{width: '70%',display: 'inline-block',margin: 'auto', marginBottom:'1%'}} type="text" placeholder="Wpisz nazwę" name="title" id="title" value={data.title} onChange={handleChange}/>
                     <br />
-                    <label htmlFor="text">Opis zadania:</label>
-                    <input type="text" placeholder="Wpisz opis" name="description" id="description" value={data.description} onChange={handleChange}/>
+                    <label className="label" htmlFor="text">Opis zadania:</label>
+                    <input style={{width: '70%',display: 'inline-block',margin: 'auto'}} type="text" placeholder="Wpisz opis" name="description" id="description" value={data.description} onChange={handleChange}/>
                     <br />
+                    <label className="checkbox">
+                        Nawyk
+                        <input style={{marginLeft:'1%'}} type="checkbox" checked={data.is_habit} name="is_habit" id="is_habit" onChange={handleChange} />
+                    </label>
                     {error && <div>{error}</div>}
-                    <button type="submit">Dodaj zadanie</button>
+                    <button className="btn-login-register" type="submit">Dodaj zadanie</button>
                 </form>
             </div>
             
-            <div>
-                <h4>Twoje zadania</h4>
-                {tasks.length === 0 && <div>Brak tasków!</div>}
-                {tasks && tasks.map(task => (
-                    editState === task._id ? 
+            <div style={{marginTop:'15%'}}>
+                <div style={{width:'50%', float:'left', borderRight:'solid 1px white'}}>
+                    <h4 className="header">Twoje zadania</h4>
+                    <hr />
+                    {tasks.length === 0 && <div  style={{textAlign: "center"}}>Brak zadań!</div>}
+                    {tasks && tasks.map(task => (
+                        editStateTask === task._id ? 
 
-                    <div key={task._id}>
-                        <input type="text"  name="title" id="title" value={task.title} onChange={handleEditChange}/>
-                        <input type="text" name="description" id="description" value={task.description} onChange={handleEditChange}/>
-                        {error && <div>{error}</div>}
-                        <button className="edit-task" onClick={() => handleSave(task)}>Zapisz</button>
-                        <hr />
-                    </div>
-                    :
-                    <div className={'task'} key={task._id}>
-                      <div className="text"> {task.title}</div>
-                      <div className="text"> {task.description}</div>
-                      <br/>
-                      <button onClick={() => handleCompleteTask(task)} className="complete-task">Zrobione!</button>
-                      <button onClick={() => handleEditTask(task._id)} className="edit-task">Edytuj</button>
-                      <button onClick={() => handleDeleteTask(task._id)} className="delete-task">Usuń</button>
-                      <hr />
-                    </div>
-                ))}
-            </div>  
+                        <div style={{textAlign: "center"}} key={task._id}>
+                            <input type="text"  name="title" placeholder="Podaj nazwę" id="title" value={task.title} onChange={handleEditTaskChange}/>
+                            <input type="text" name="description" placeholder="Podaj opis" id="description" value={task.description} onChange={handleEditTaskChange}/>
+                            {error && <div>{error}</div>}
+                            <button className="btn-tasks" onClick={() => handleSave(task)}>Zapisz</button>
+                            <hr />
+                        </div>
+                        :
+
+                        !task.is_habit ?
+
+                        <div style={{textAlign: "center"}} className={'task'} key={task._id}>
+                            <div style={{textAlign: "left"}} className="title"> {task.title}</div>
+                            <div style={{textAlign: "left"}} className="description"> {task.description}</div>
+                            <br/>
+                            <button onClick={() => handleCompleteTask(task)} className="btn-tasks">Done!</button>
+                            <button onClick={() => handleEditTask(task._id)} className="btn-tasks">Edytuj</button>
+                            <button onClick={() => handleDeleteTask(task._id)} className="btn-tasks">Usuń</button>
+                            <hr />
+                        </div>
+                        :
+                        ''
+                    ))}
+                </div>
+
+
+
+
+
+                <div style={{width:'50%', float:'left'}}>
+                    <h4  className="header">Twoje nawyki</h4>
+                    <hr />
+                    {tasks.length === 0 && <div  style={{textAlign: "center"}}>Brak nawyków!</div>}
+                    {tasks && tasks.map(task => (
+                        editStateHabit === task._id ?
+
+                        <div style={{textAlign: "center"}} key={task._id}>
+                            <input type="text"  name="title" placeholder="Podaj nazwę" id="title" value={task.title} onChange={handleEditHabitChange}/>
+                            <input type="text" name="description" placeholder="Podaj opis" id="description" value={task.description} onChange={handleEditHabitChange}/>
+                            {error && <div>{error}</div>}
+                            <button className="btn-tasks" onClick={() => handleSave(task)}>Zapisz</button>
+                            <hr />
+                        </div>
+                        :
+
+                        task.is_habit ?
+
+                        <div style={{textAlign: "center"}} className={'task'} key={task._id}>
+                            <div style={{textAlign: "left" , marginLeft: '3%'}} className="text"> {task.title}</div>
+                            <div style={{textAlign: "left" , marginLeft: '3%'}} className="text"> {task.description}</div>
+                            <br/>
+                            <button onClick={() => handleCompleteTask(task)} className="btn-tasks">Done!</button>
+                            <button onClick={() => handleEditHabit(task._id)} className="btn-tasks">Edytuj</button>
+                            <button onClick={() => handleDeleteTask(task._id)} className="btn-tasks">Usuń</button>
+                            <hr />
+                        </div>
+                        :
+                        ''
+                    ))}
+                </div>
+                <footer style={{clear:'both', textAlign:'center'}}>
+                    Copyright
+                </footer>
+            </div>
         </div>
     )
 }

@@ -3,7 +3,7 @@ const Task = require("../models/taskModel")
 const dotenv = require("dotenv").config()
 
 const addTask = asyncHandler(async (req,res) => {
-    const {title, description} = req.body
+    const {title, description, is_habit} = req.body
     const user = req.user.id
     const completed = false
     console.log(user)
@@ -22,7 +22,8 @@ const addTask = asyncHandler(async (req,res) => {
         title,
         description,
         user,
-        completed
+        completed,
+        is_habit
     })
 
     console.log(`task created ${task}`)
@@ -30,7 +31,7 @@ const addTask = asyncHandler(async (req,res) => {
 
     if(task) {
         res.status(200),
-        res.json({_id: task.id, title: task.title, description: task.description, completed: task.completed, user: task.user})
+        res.json({_id: task.id, title: task.title, description: task.description, completed: task.completed, user: task.user, is_habit: task.is_habit})
     }else {
         res.status(400)
         // res.send({message: "Task data is not valid"})

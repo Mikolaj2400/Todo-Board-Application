@@ -16,6 +16,10 @@ const taskSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User', // Referencja do kolekcji users
         required: true
+    },
+    is_habit: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true
