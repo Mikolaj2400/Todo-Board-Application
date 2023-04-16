@@ -15,10 +15,47 @@ const Tasks = () => {
         is_habit: false
     })
 
+    //wyświetlanie i renderowanie taskow i nawyków
+
     useEffect (() => {
 
-        getTasks()
+        getTasks()        
       }, [])
+
+
+    useEffect (() => {
+
+        const intervalId = setInterval(() => {
+            const now = new Date();
+                if (now.getHours() === 0 && now.getMinutes() === 0) {
+                    // wywołaj funkcję
+                    handleHabitChange()
+                    console.log('Wywołano funkcję o północy');
+                    console.log(tasks)
+                }
+        }, 60000); // interwał 60 sekund (jedna minuta)
+            return () => clearInterval(intervalId);
+    }, [tasks])
+
+
+
+    const handleHabitChange = async () => {
+        console.log("wywolano")
+
+        const updatedTasks = tasks.map (task => {
+            if (task.is_habit && task.completed) {
+                handleCompleteTask(task)
+                return {
+                  ...task,
+                  completed: false,
+                };
+              }
+              return task;
+        })
+        setTasks(updatedTasks)
+    }
+
+
 
 //wyświetlanie
 
@@ -256,7 +293,7 @@ const Tasks = () => {
 
                         !task.is_habit ?
 
-                        <div style={{textAlign: "center"}} className={'task'} key={task._id}>
+                        <div style={{textAlign: "center"}} className={'task ' + (task.completed ? "is-complete": "")} key={task._id}>
                             <div style={{textAlign: "left"}} className="title"> {task.title}</div>
                             <div style={{textAlign: "left"}} className="description"> {task.description}</div>
                             <br/>
@@ -292,7 +329,7 @@ const Tasks = () => {
 
                         task.is_habit ?
 
-                        <div style={{textAlign: "center"}} className={'task'} key={task._id}>
+                        <div style={{textAlign: "center"}} className={'task ' + (task.completed ? "is-complete": "")} key={task._id}>
                             <div style={{textAlign: "left" , marginLeft: '3%'}} className="text"> {task.title}</div>
                             <div style={{textAlign: "left" , marginLeft: '3%'}} className="text"> {task.description}</div>
                             <br/>

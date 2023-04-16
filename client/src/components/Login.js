@@ -46,7 +46,7 @@ const Login = () => {
                     <li><strong>ToDo List Simplified</strong></li>
                 </ul>
             </nav>
-            <p style={{textAlign: "center", margin:'1%'}}>
+            <p style={{textAlign: "center", marginTop:'1%'}}>
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. 
                 Vero numquam accusantium molestias recusandae error iusto nesciunt reiciendis laborum repellat sint, veniam ad quaerat atque commodi autem! Quo error adipisci vel.
             </p>

@@ -40,3 +40,7 @@
 .header{
   text-align: center;
 }
+
+.task.is-complete {
+  text-decoration: line-through;
+}
