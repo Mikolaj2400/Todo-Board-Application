@@ -10,15 +10,15 @@ const registerUser = asyncHandler(async (req,res) => {
     const {email, password} = req.body
     if(!email || !password) {
         res.status(400)
-        res.send({message: "All fields are mandatory"})
-        throw new Error("All fields are mandatory")
+        res.send({message: "E-mail lub hasło nie zostało uzupełnione"})
+        throw new Error("E-mail lub hasło nie zostało uzupełnione")
     }
 
     const userAvailable = await User.findOne({email:email})
     if(userAvailable) {
         res.status(400)
-        res.send({message: "Email already used"})
-        throw new Error("Email already used")
+        res.send({message: "Email znajduje się już w systemie"})
+        throw new Error("Email znajduje się już w systemie")
     }
 
     //hashing password
@@ -44,8 +44,8 @@ const loginUser = asyncHandler(async (req,res) => {
     const {email, password} = req.body
     if(!email || !password) {
         res.status(400)
-        res.send({message: "All fields are mandatory"})
-        throw new Error("All fields are mandatory")
+        res.send({message: "E-mail lub hasło nie zostało uzupełnione"})
+        throw new Error("E-mail lub hasło nie zostało uzupełnione")
     }
 
     const user = await User.findOne({email:email})
@@ -64,9 +64,8 @@ const loginUser = asyncHandler(async (req,res) => {
         res.json({accessToken})
     }else {
         res.status(401)
-        res.send({message: "Email or password is not correct"})
-        throw new Error("Email or password is not correct")
-
+        res.send({message: "Email lub hasło nie jest poprawne"})
+        throw new Error("Email lub hasło nie jest poprawne")
     }
 })
 

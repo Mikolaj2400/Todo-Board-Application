@@ -10,8 +10,8 @@ const addTask = asyncHandler(async (req,res) => {
 
     if(!title) {
         res.status(400)
-        res.send({message: "Uzupełnij tytuł"})
-        throw new Error("Uzupełnij tytuł")
+        res.send({message: "Uzupełnij nazwę"})
+        throw new Error("Uzupełnij nazwę")
     } else if(!user) {
         res.status(400)
         // res.send({message: "Brak zalogowanego użytkownika"})
@@ -93,8 +93,8 @@ const editTask = asyncHandler(async (req,res) => {
     } else {
         if(!title) {
             res.status(400)
-            res.send({message: "Uzupełnij tytuł"})
-            throw new Error("Uzupełnij tytuł")
+            res.send({message: "Uzupełnij nazwę"})
+            throw new Error("Uzupełnij nazwę")
         }
         await Task.findByIdAndUpdate(
             req.params.id,

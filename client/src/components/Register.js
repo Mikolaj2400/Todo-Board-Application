@@ -36,22 +36,29 @@ const Register = () => {
         <div className="App">
             <nav>
                 <ul>
-                    <li><strong>ToDo List Simplified</strong></li>
+                    <li style={{color:'white'}}><b>ToDo List Simplified</b></li>
                 </ul>
             </nav>
-            <h2 style={{textAlign: "center"}}>Rejestracja</h2>
-            <form style={{textAlign: "center"}} onSubmit={handleSubmit}>
-                <label className="label" htmlFor="email">E-mail:</label>
-                <input style={{width: '70%',display: 'inline-block',margin: 'auto', marginBottom:'1%'}} type="email" placeholder="Podaj E-mail" name="email" id="email" value={data.email} onChange={handleChange}/>
-                <br />
-                <label className="label" htmlFor="password">Hasło:</label>
-                <input style={{width: '70%',display: 'inline-block',margin: 'auto'}} type="password" placeholder="Podaj hasło" name="password" id="" value={data.password} onChange={handleChange}/>
-                <br />
-                {error && <div>{error}</div>}
-                <button className="btn-login-register" type="submit">Zarejestruj się</button>
-            </form>
+            <div style={{marginTop:'7%'}}>
+                <h2 style={{textAlign: "center"}}>Rejestracja</h2>
+                <form style={{textAlign: "center"}} onSubmit={handleSubmit}>
+                    <label className="label" htmlFor="email">E-mail:</label>
+                    <input style={{width: '70%',display: 'inline-block',margin: 'auto', marginBottom:'1%'}} type="email" placeholder="Podaj E-mail" name="email" id="email" value={data.email} onChange={handleChange}/>
+                    <br />
+                    <label className="label" htmlFor="password">Hasło:</label>
+                    <input style={{width: '70%',display: 'inline-block',margin: 'auto'}} type="password" placeholder="Podaj hasło" name="password" id="" value={data.password} onChange={handleChange}/>
+                    <br />
+                    {error && <div>{error}</div>}
+                    <button className="btn-login-register" type="submit">Zarejestruj się</button>
+                </form>
 
-            <p style={{textAlign: "center"}}>Jeśli masz już konto, przejdź do <Link to="/api/user/login">Logowania</Link></p>
+                <p style={{textAlign: "center"}}>Jeśli masz już konto, przejdź do <Link to="/api/user/login">Logowania</Link></p>
+            </div>
+
+            <footer className="footer">
+                    <hr />
+                    <p>Copyright®</p> 
+            </footer>
         </div>
     )
 }

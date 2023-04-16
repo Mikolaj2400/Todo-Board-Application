@@ -15,14 +15,22 @@
 }
 
 .btn-tasks{
-  width: 20%;
+  width: 10%;
   margin: 2%;
-  padding: 3%;
+  padding: 2%;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   overflow-wrap: break-word;
 }
+
+.btn.save {
+  width: 20%;
+  margin: 2%;
+  padding: 3%;
+}
+
+
 
 .checkbox{
   margin-top:1%;
@@ -41,6 +49,29 @@
   text-align: center;
 }
 
-.task.is-complete {
+.task.is-complete .text {
   text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.text {
+  margin-left: 10%;
+  width:90%;
+}
+
+.title {
+  font-size: 125%;
+  font-weight: bold;
+}
+
+.description{
+  font-size: 80%;
+}
+
+.footer{
+  clear: both;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  width: 99%;
 }

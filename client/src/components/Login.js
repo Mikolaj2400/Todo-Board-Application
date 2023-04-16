@@ -22,10 +22,6 @@ const Login = () => {
             .then(res => localStorage.setItem("token", res.data.accessToken, 
             {headers: {'Authorization': `Bearer ${res.data.accessToken}`}},
             window.location = "/api/tasks/")) 
-            .catch(err => console.error(err))
-            // , {headers: {'Authorization': `Bearer ${res.data.accessToken}`}}
-            // window.location = "/api/tasks/"
-            // console.log(res.message)
         } catch (error) {
             if(error.response && error.response.status >= 400 && error.response.status <= 500) {
                 setError(error.response.data.message)
@@ -43,13 +39,15 @@ const Login = () => {
         <div className="App">
             <nav>
                 <ul>
-                    <li><strong>ToDo List Simplified</strong></li>
+                    <li style={{color:'white'}}><b>ToDo List Simplified</b></li>
                 </ul>
             </nav>
-            <p style={{textAlign: "center", marginTop:'1%'}}>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. 
-                Vero numquam accusantium molestias recusandae error iusto nesciunt reiciendis laborum repellat sint, veniam ad quaerat atque commodi autem! Quo error adipisci vel.
-            </p>
+            <div style={{textAlign: "center", marginTop:'3%', marginBottom:'7%'}}>
+                <p style={{fontSize:'30px', color:'white'}}>
+                    Na <b>ToDo List Simplified</b> zapisuj swoje Zadania i ćwicz swoje Nawyki!
+                </p>
+                <p style={{fontSize:'25px'}}><Link to="/api/user/register">Zarejestruj się za darmo już dziś!</Link></p>
+            </div>
             <h2 style={{textAlign: "center"}}>Logowanie</h2>
             <form style={{textAlign: "center"}} onSubmit={handleSubmit}>
                 <label className="label" htmlFor="email">E-mail:</label>
@@ -61,9 +59,12 @@ const Login = () => {
                 {error && <div>{error}</div>}
                 <button className="btn-login-register" type="submit">Zaloguj się</button>
             </form>
-
-            <p style={{textAlign: "center"}}>Jeśli nie masz konta <Link to="/api/user/register">Zarejestruj się</Link></p>
+            <footer className="footer">
+                    <hr />
+                   <p>Copyright®</p> 
+            </footer>
         </div>
+
     )
 }
 
