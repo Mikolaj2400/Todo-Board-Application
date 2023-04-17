@@ -61,7 +61,7 @@ const Login = () => {
             </form>
             <footer className="footer">
                     <hr />
-                   <p>Copyright®</p> 
+                   <p>&copy; 2023 ToDo List Simplified</p> 
             </footer>
         </div>
 

@@ -282,7 +282,7 @@ const Tasks = () => {
                 <div style={{width:'50%', float:'left'}}>
                     <h4 className="header">Twoje zadania</h4>
                     <hr />
-                    {tasks && tasks.map(task => (
+                    {tasks && tasks.slice().reverse().map(task => (
                         editStateTask === task._id ? 
 
                         <div style={{textAlign: "center"}} key={task._id}>
@@ -302,15 +302,15 @@ const Tasks = () => {
                             <br/>
                             {!task.completed && 
                             <div>
-                                <button onClick={() => handleCompleteTask(task)} className="btn-tasks">✓</button>
-                                <button onClick={() => handleEditTask(task._id)} className="btn-tasks">✎</button>
-                                <button onClick={() => handleDeleteTask(task._id)} className="btn-tasks">🗑</button>               
+                                <button data-tooltip="Wykonaj" data-placement="top" onClick={() => handleCompleteTask(task)} className="btn-tasks">✓</button>
+                                <button data-tooltip="Edytuj" data-placement="top" onClick={() => handleEditTask(task._id)} className="btn-tasks">✎</button>
+                                <button data-tooltip="Usuń" data-placement="top" onClick={() => handleDeleteTask(task._id)} className="btn-tasks">🗑</button>               
                             </div>}
 
                             {task.completed && 
                             <div>
-                                <button onClick={() => handleCompleteTask(task)} className="btn-tasks">X</button>
-                                <button onClick={() => handleDeleteTask(task._id)} className="btn-tasks">🗑</button>
+                                <button data-tooltip="Przywróć" data-placement="top" onClick={() => handleCompleteTask(task)} className="btn-tasks">X</button>
+                                <button data-tooltip="Usuń" data-placement="top" onClick={() => handleDeleteTask(task._id)} className="btn-tasks">🗑</button>
                                 <p>Zadanie wykonane</p>
                             </div>}
                             <hr />
@@ -328,7 +328,7 @@ const Tasks = () => {
                 <div style={{width:'50%', float:'left'}}>
                     <h4  className="header">Twoje nawyki</h4>
                     <hr />
-                    {tasks && tasks.map(task => (
+                    {tasks && tasks.slice().reverse().map(task => (
                         editStateHabit === task._id ?
 
                         <div  style={{textAlign: "center"}} key={task._id}>
@@ -348,14 +348,14 @@ const Tasks = () => {
                             <br />
                             {!task.completed &&
                             <div>
-                                <button onClick={() => handleCompleteTask(task)} className="btn-tasks">✓</button>
-                                <button onClick={() => handleEditHabit(task._id)} className="btn-tasks">✎</button>
-                                <button onClick={() => handleDeleteTask(task._id)} className="btn-tasks">🗑</button>
+                                <button data-tooltip="Wykonaj" data-placement="top" onClick={() => handleCompleteTask(task)} className="btn-tasks">✓</button>
+                                <button data-tooltip="Edytuj" data-placement="top" onClick={() => handleEditHabit(task._id)} className="btn-tasks">✎</button>
+                                <button data-tooltip="Usuń" data-placement="top" onClick={() => handleDeleteTask(task._id)} className="btn-tasks">🗑</button>
                             </div>}
                             {task.completed && 
                                 <div>
-                                    <button onClick={() => handleCompleteTask(task)} className="btn-tasks">X</button>
-                                    <button onClick={() => handleDeleteTask(task._id)} className="btn-tasks">🗑</button>
+                                    <button data-tooltip="Przywróć" data-placement="top" onClick={() => handleCompleteTask(task)} className="btn-tasks">X</button>
+                                    <button data-tooltip="Usuń" data-placement="top" onClick={() => handleDeleteTask(task._id)} className="btn-tasks">🗑</button>
                                     <p>Nawyk wykonany!</p>
                                 </div>}
                             <hr />
@@ -367,7 +367,7 @@ const Tasks = () => {
                 }
                 <footer style={{clear:'both', textAlign:'center'}}>
                     <hr />
-                    <p>Copyright®</p> 
+                    <p>&copy; 2023 ToDo List Simplified</p> 
                 </footer>
             </div>
         </div>
